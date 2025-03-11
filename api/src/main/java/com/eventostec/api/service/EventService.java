@@ -1,6 +1,7 @@
 package com.eventostec.api.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.eventostec.api.domain.address.Address;
 import com.eventostec.api.domain.event.Event;
 import com.eventostec.api.domain.event.EventRequestDTO;
 import com.eventostec.api.domain.event.EventResponseDTO;
@@ -28,6 +29,9 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private AddressService addressService;
+
     @Value("${aws.bucket.name}")
     private String bucketName;
 
@@ -49,9 +53,16 @@ public class EventService {
 
         eventRepository.save(newEvent);
 
+        if (!data.remote()){
+            this.addressService.createAddress(data, newEvent);
+        }
+
+
         return newEvent;
 
     }
+
+
 
     private String uploadImg(MultipartFile image) {
         String fileName = UUID.randomUUID() + "-" + image.getOriginalFilename();
@@ -82,9 +93,42 @@ public class EventService {
     public List<EventResponseDTO> getEvents(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<Event> eventsPage = this.eventRepository.findAll(pageable);
+        Page<Event> eventsPage = this.eventRepository.findUpcomingEvents(new Date(), pageable);
 
-        return eventsPage.map(event -> new EventResponseDTO(event.getId(), event.getTitle(), event.getDescription(), event.getDate(), "", "", event.getRemote(), event.getEventUrl(), event.getImgUrl()))
+        return eventsPage.map(event -> new EventResponseDTO(
+                        event.getId(),
+                        event.getTitle(),
+                        event.getDescription(),
+                        event.getDate(),
+                        event.getAddress() != null ? event.getAddress().getCity() : "",
+                        event.getAddress() != null ? event.getAddress().getUf() : "",
+                        event.getRemote(),
+                        event.getEventUrl(),
+                        event.getImgUrl()))
+                .stream().toList();
+    }
+
+    public List<EventResponseDTO> getFilteredEvents(int page, int size, String title, String city, String uf, Date startDate, Date endDate) {
+        title = (title != null) ? title : "";
+        city = (city != null) ? city : "";
+        uf = (uf != null) ? uf : "";
+        startDate = (startDate != null) ? startDate : new Date(0);
+        endDate = (endDate != null) ? endDate : new Date();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Event> eventsPage = this.eventRepository.findFilteredEvents(title, city, uf, startDate, endDate, pageable);
+
+        return eventsPage.map(event -> new EventResponseDTO(
+                        event.getId(),
+                        event.getTitle(),
+                        event.getDescription(),
+                        event.getDate(),
+                        event.getAddress() != null ? event.getAddress().getCity() : "",
+                        event.getAddress() != null ? event.getAddress().getUf() : "",
+                        event.getRemote(),
+                        event.getEventUrl(),
+                        event.getImgUrl()))
                 .stream().toList();
     }
 }
