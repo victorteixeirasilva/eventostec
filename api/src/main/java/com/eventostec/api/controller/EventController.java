@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/event")
@@ -55,6 +56,12 @@ public class EventController {
             ){
         List<EventResponseDTO> event = eventService.getFilteredEvents(page, size, title, city, uf, startDate, endDate);
         return ResponseEntity.ok(event);
+    }
+
+    @GetMapping("/{eventId}")
+    public ResponseEntity<List<EventResponseDTO>> getEvents(@PathVariable UUID eventId) {
+        EventDetailsDTO eventDetails = eventService.getEventDetails(eventId);
+        return ResponseEntity.ok(eventDetails);
     }
 
 }
