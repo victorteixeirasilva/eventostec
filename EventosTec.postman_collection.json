@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "4ace1d21-4e6d-49a7-9b97-1a0de3a13e1b",
+		"name": "EventosTec",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26691976"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "Frontin Samp",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "teste",
+							"type": "text"
+						},
+						{
+							"key": "eventUrl",
+							"value": "https://teste.com",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/victo/Downloads/Logo-95px.png"
+						},
+						{
+							"key": "date",
+							"value": "174207",
+							"type": "text"
+						},
+						{
+							"key": "remote",
+							"value": "false",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "São Paulo",
+							"type": "text"
+						},
+						{
+							"key": "state",
+							"value": "SP",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/event",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/event?page=0&size=15",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"event"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "15"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/event/filter?page=0&size=15&uf=SP",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"event",
+						"filter"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "15"
+						},
+						{
+							"key": "uf",
+							"value": "SP"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
